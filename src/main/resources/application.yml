@@ -1,0 +1,19 @@
+# Default profile configuration
+
+server:
+  port: 8080
+  http2:
+    enabled: true
+  shutdown: graceful
+
+logging:
+  level:
+    root: info
+
+spring:
+  application:
+    name: beannote-api
+  output:
+    ansi:
+      enabled: always
+
