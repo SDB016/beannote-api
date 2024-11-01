@@ -49,7 +49,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-integration")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 
     /** kotlin **/
@@ -68,9 +68,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${DependencyVersion.JWT_VERSION}")
 
     /** spring integration **/
-    implementation("org.springframework.integration:spring-integration-jpa")
     implementation("org.springframework.integration:spring-integration-mongodb")
     implementation("org.springframework.integration:spring-integration-webflux")
+//    implementation("org.springframework.integration:spring-integration-jpa")
 
     /** configuration processor **/
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
