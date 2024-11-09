@@ -17,7 +17,7 @@ abstract class BaseDocument {
     }
 
     @CreatedDate
-    private val _createdAt: Instant = Instant.now()
+    private var _createdAt: Instant = Instant.now()
 
     @LastModifiedDate
     private var _modifiedAt: Instant = Instant.now()

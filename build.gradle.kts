@@ -38,9 +38,7 @@ repositories {
  * jpa meta-annotations not automatically opened through the default settings of the plugin.spring
  */
 allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
+    annotation("org.springframework.data.mongodb.core.mapping.Document")
 }
 
 dependencies {
@@ -81,9 +79,18 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mongodb")
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.integration:spring-integration-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    /** kotest **/
+    testImplementation("io.kotest:kotest-runner-junit5:${DependencyVersion.KOTEST}")
+    testImplementation("io.kotest:kotest-assertions-core:${DependencyVersion.KOTEST}")
+    testImplementation("io.kotest:kotest-property:${DependencyVersion.KOTEST}")
+    testImplementation("io.kotest.extensions:kotest-extensions-testcontainers:${DependencyVersion.KOTEST_EXT_TESTCONTAINER}")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:${DependencyVersion.KOTEST_EXT_SPRING}")
+
+    /** mockk **/
+    testImplementation("io.mockk:mockk:${DependencyVersion.MOCKK}")
+
 }
 
 // defaultTasks("bootRun")

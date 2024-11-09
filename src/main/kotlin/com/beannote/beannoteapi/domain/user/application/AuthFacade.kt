@@ -15,20 +15,20 @@ class AuthFacade(
     private val userInfoService: UserInfoService,
     private val credentialUserInfoService: CredentialUserInfoService,
 ) {
+
     suspend fun signUp(request: SignUpRequest): SignUpResponse {
         if (credentialUserInfoService.existsByUsername(request.username)) {
             throw InvalidRequestException(ErrorCode.DUPLICATE_USERNAME_ERROR)
         }
-
         val userInfo: UserInfo = saveUser(request)
 
         val accessToken = jwtProvider.createToken(userInfo.id)
-
         return SignUpResponse(accessToken)
     }
 
+
     @Transactional
-    private fun saveUser(request: SignUpRequest): UserInfo {
+    suspend fun saveUser(request: SignUpRequest): UserInfo {
         val userInfo: UserInfo = userInfoService.save(UserInfo(nickname = request.username))
 
         credentialUserInfoService.save(

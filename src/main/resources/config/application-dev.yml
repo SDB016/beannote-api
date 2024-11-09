@@ -1,0 +1,16 @@
+auth:
+  jwt:
+    secret: test_secret_key_must_be_at_least_32_bytes_long_for_hmac_sha
+    accessExp: 3600 # 예시로 만료시간을 설정
+    refreshExp: 7200 # 예시로 만료시간을 설정
+    issuer: your-api-name
+    audience: your-api-name
+    tokenPrefix: Bearer
+
+#logging:
+#  level:
+#    org:
+#      mongodb:
+#        driver: INFO
+#        driver.protocol.command: DEBUG
+#        driver.operation: WARN
