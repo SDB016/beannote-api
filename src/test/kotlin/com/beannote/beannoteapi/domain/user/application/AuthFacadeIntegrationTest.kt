@@ -17,14 +17,14 @@ import org.springframework.test.context.ActiveProfiles
 class AuthFacadeIntegrationTest(
     private val authFacade: AuthFacade,
     private val userInfoService: UserInfoService,
-    private val credentialUserInfoService: CredentialUserInfoService
-): DescribeSpec() {
+    private val credentialUserInfoService: CredentialUserInfoService,
+) : DescribeSpec() {
     override fun extensions() = listOf(SpringExtension)
 
     private val logger = KotlinLogging.logger { }
 
     init {
-        describe("AuthFacade") {
+        describe("AuthFacade Integration tests") {
             context("회원가입 요청이 주어지면") {
                 it("유저를 등록하고, 토큰을 생성해 반환한다.") {
                     val username = "testUsername"
@@ -49,5 +49,4 @@ class AuthFacadeIntegrationTest(
             }
         }
     }
-
 }

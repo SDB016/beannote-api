@@ -2,36 +2,52 @@ package com.beannote.beannoteapi.config
 
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.listeners.ProjectListener
+import io.kotest.core.listeners.TestListener
+import io.kotest.core.spec.Spec
 import org.testcontainers.containers.MongoDBContainer
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class UseMongoDBTestContainer
 
-object MongoDBContainerExtension : ProjectListener {
-    private val mongoDBContainer: MongoDBContainer by lazy {
-        MongoDBContainer("mongo:8.0.3").apply {
-            withReuse(true)
-            withExposedPorts(27017)
-            start()
+object MongoDBTestContainerManager {
+    private var mongoDBContainer: MongoDBContainer? = null
+
+    // 컨테이너 시작 및 URI 설정
+    fun startContainer() {
+        if (mongoDBContainer == null) {
+            mongoDBContainer =
+                MongoDBContainer("mongo:8.0.3").apply {
+                    withReuse(true)
+                    withExposedPorts(27017)
+                    start()
+                }
+            System.setProperty("spring.data.mongodb.uri", mongoDBContainer!!.replicaSetUrl)
         }
     }
 
-    override suspend fun beforeProject() {
-        // Testcontainer 시작시 MongoDB URI 속성 설정
-        System.setProperty("spring.data.mongodb.uri", mongoDBContainer.replicaSetUrl)
+    // 컨테이너 정리
+    fun stopContainer() {
+        mongoDBContainer?.stop()
+        mongoDBContainer = null
+    }
+
+    fun getMongoUri() = mongoDBContainer?.replicaSetUrl
+}
+
+object ConditionalMongoDBContainerListener : TestListener, ProjectListener {
+    override suspend fun beforeSpec(spec: Spec) {
+        // @UseMongoDBTestContainer 붙은 Spec에서만 testcontainer 시작
+        if (spec::class.annotations.any { it is UseMongoDBTestContainer }) {
+            MongoDBTestContainerManager.startContainer()
+        }
     }
 
     override suspend fun afterProject() {
-        // 프로젝트 종료 시 Testcontainer 정리
-        mongoDBContainer.stop()
+        MongoDBTestContainerManager.stopContainer()
     }
-
-    fun getMongoUri() = mongoDBContainer.replicaSetUrl
-
 }
 
-
 object ProjectConfig : AbstractProjectConfig() {
-    override fun listeners() = listOf(MongoDBContainerExtension)
+    override fun extensions() = listOf(ConditionalMongoDBContainerListener)
 }
