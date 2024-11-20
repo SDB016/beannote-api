@@ -1,5 +1,6 @@
 package com.beannote.beannoteapi.domain.user.application
 
+import com.beannote.beannoteapi.common.encrypt.Encryptor
 import com.beannote.beannoteapi.config.database.TransactionManager
 import com.beannote.beannoteapi.domain.user.model.CredentialUserInfo
 import com.beannote.beannoteapi.domain.user.model.UserInfo
@@ -14,7 +15,8 @@ class AuthFacade(
     private val jwtProvider: JwtProvider,
     private val userInfoService: UserInfoService,
     private val credentialUserInfoService: CredentialUserInfoService,
-    private val txManager: TransactionManager
+    private val txManager: TransactionManager,
+    private val encryptor: Encryptor,
 ) {
     suspend fun signUp(request: SignUpRequest): SignUpResponse {
         if (credentialUserInfoService.existsByUsername(request.username)) {
@@ -29,7 +31,7 @@ class AuthFacade(
                     CredentialUserInfo(
                         uid = userInfo.id,
                         username = request.username,
-                        password = request.password, // TODO("비번 암호화")
+                        password = encryptor.encrypt(request.password),
                     ),
                 )
                 userInfo

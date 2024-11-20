@@ -7,6 +7,10 @@ auth:
     audience: your-api-name
     tokenPrefix: Bearer
 
+encrypt:
+  key: "1234567890123456"
+  algorithm: "AES/CBC/PKCS5Padding"
+
 #logging:
 #  level:
 #    org:
