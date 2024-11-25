@@ -15,6 +15,13 @@ class JwtProvider(
     private val jwtProperties: JwtConfig.JwtProperties,
 ) {
     private val logger = KotlinLogging.logger {}
+
+    init {
+        require(jwtProperties.secret.toByteArray().size >= 32) {
+            "JWT secret key must be at least 32 bytes long for security."
+        }
+    }
+
     private val key = Keys.hmacShaKeyFor(jwtProperties.secret.toByteArray())
 
     fun createToken(id: ObjectId): String {

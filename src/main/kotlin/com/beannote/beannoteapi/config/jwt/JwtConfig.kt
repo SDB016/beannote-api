@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @EnableConfigurationProperties(JwtConfig.JwtProperties::class)
 class JwtConfig(
-    private val jwtProperties: JwtProperties,
+//    private val jwtProperties: JwtProperties,
 ) {
     private val logger = KotlinLogging.logger {}
 
